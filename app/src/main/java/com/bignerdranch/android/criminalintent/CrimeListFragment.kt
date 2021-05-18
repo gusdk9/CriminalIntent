@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -67,6 +68,7 @@ class CrimeListFragment : Fragment() {
 
         private val title: TextView = view.findViewById(R.id.crime_title)
         private val date: TextView = view.findViewById(R.id.crime_date)
+        private val solved: ImageView = view.findViewById(R.id.crime_solved)
 
         init {
             view.setOnClickListener(this)
@@ -76,6 +78,7 @@ class CrimeListFragment : Fragment() {
             this.crime = crime
             title.text = crime.title
             date.text = crime.date.toString()
+            solved.visibility = if (crime.isSolved) View.VISIBLE else View.INVISIBLE
         }
 
         override fun onClick(v: View?) {
