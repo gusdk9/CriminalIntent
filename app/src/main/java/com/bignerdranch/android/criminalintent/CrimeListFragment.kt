@@ -2,19 +2,18 @@ package com.bignerdranch.android.criminalintent
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
 import java.util.*
 
 private const val TAG = "CrimeListFragment"
@@ -58,7 +57,6 @@ class CrimeListFragment : Fragment() {
             viewLifecycleOwner,
             Observer { crimes ->
                 crimes?.let {
-                    Log.i(TAG, "Got crimes ${crimes.size}")
                     updateUI(crimes)
                 }
             }
@@ -76,8 +74,20 @@ class CrimeListFragment : Fragment() {
         crimeRecyclerView.adapter = adapter
     }
 
+    object DiffCallback : DiffUtil.ItemCallback<Crime>() {
+        override fun areItemsTheSame(oldItem: Crime, newItem: Crime): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Crime, newItem: Crime): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
     private inner class CrimeAdapter(var crimes: List<Crime>) :
         RecyclerView.Adapter<CrimeHolder>() {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
             val view = layoutInflater.inflate(R.layout.item_crime, parent, false)
             return CrimeHolder(view)
