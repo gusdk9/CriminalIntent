@@ -25,6 +25,7 @@ class CrimeListFragment : Fragment() {
     private var callbacks: Callbacks? = null
 
     private lateinit var crimeRecyclerView: RecyclerView
+    private lateinit var emptyTextView: TextView
     private var adapter: CrimeAdapter? = CrimeAdapter()
 
     private val crimeListViewModel: CrimeListViewModel by lazy {
@@ -47,6 +48,7 @@ class CrimeListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
 
+        emptyTextView = view.findViewById(R.id.empty_text_view) as TextView
         crimeRecyclerView = view.findViewById(R.id.crime_recycler_view) as RecyclerView
         crimeRecyclerView.layoutManager = LinearLayoutManager(context)
         crimeRecyclerView.adapter = adapter
@@ -62,9 +64,18 @@ class CrimeListFragment : Fragment() {
                 crimes?.let {
                     adapter?.submitList(it)
                 }
+
+                // TODO : 아이템이 없는 상태에서 하나 추가한 뒤 다시 돌아오면 emptyTextView 유지된다.
+                adapter?.let {
+                    if (it.itemCount < 1) {
+                        emptyTextView.visibility = View.VISIBLE
+                    } else {
+                        emptyTextView.visibility = View.GONE
+                    }
+                }
+
             }
         )
-
     }
 
     override fun onDetach() {
