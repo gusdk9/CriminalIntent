@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
+import kotlin.math.roundToInt
 
 fun getScaledBitmap(path: String, activity: Activity): Bitmap {
     val size = Point()
@@ -31,7 +32,7 @@ fun getScaledBitmap(path: String, destWidth: Int, destHeight: Int): Bitmap {
         val widthScale = srcWidth / destWidth
 
         val sampleScale = if (heightScale > widthScale) heightScale else widthScale
-        inSampleSize = Math.round(sampleScale)
+        inSampleSize = sampleScale.roundToInt()
     }
 
     options = BitmapFactory.Options()
