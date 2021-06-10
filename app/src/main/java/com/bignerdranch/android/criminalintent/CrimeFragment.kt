@@ -195,22 +195,35 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        crimeDetailViewModel.saveCrime(crime)
-    }
-
     private fun updateUI() {
         titleField.setText(crime.title)
         dateButton.text = crime.date.toString()
         solvedCheckBox.apply {
             isChecked = crime.isSolved
+            // 데이터베이스 쿼리가 끝나면서 checkBox 의 상태를 설정할 때 깜빡이는 애니메이션 이 실행되는데
+            // 이 때, 아래 코드를 추가하면 애니메이션을 생략할 수 있다.
             jumpDrawablesToCurrentState()
         }
 
         if (crime.suspect.isNotEmpty()) {
             suspectButton.text = crime.suspect
         }
+
+        updatePhotoView()
+    }
+
+    private fun updatePhotoView() {
+        if (photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            photoView.setImageBitmap(bitmap)
+        } else {
+            photoView.setImageDrawable(null)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        crimeDetailViewModel.saveCrime(crime)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -242,12 +255,25 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                     suspectButton.text = suspect
                 }
             }
+
+            requestCode == REQUEST_PHOTO -> {
+                requireActivity().revokeUriPermission(
+                    photoUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+                updatePhotoView()
+            }
         }
     }
 
     override fun onDateSelected(date: Date) {
         crime.date = date
         updateUI()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 
     companion object {
