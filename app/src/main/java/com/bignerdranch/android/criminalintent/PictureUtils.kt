@@ -17,7 +17,7 @@ fun getScaledBitmap(path: String, activity: Activity): Bitmap {
 
 // TODO : rotate 되는 이슈
 fun getScaledBitmap(path: String, destWidth: Int, destHeight: Int): Bitmap {
-    // 이미지 파일의 크기를 읽는다.
+    // 이미지 파일의 크기를 읽는다
     var options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
     BitmapFactory.decodeFile(path, options)
