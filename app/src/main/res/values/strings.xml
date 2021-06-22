@@ -5,7 +5,6 @@
     <string name="crime_details_label">상세 내역</string>
     <string name="crime_solved_label">해결됨</string>
     <string name="new_crime">새로운 범죄</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_text">아이템이 존재하지 않습니다.</string>
     <string name="crime_suspect_text">용의자 선택</string>
     <string name="crime_report_text">범죄 보고서 전송</string>
