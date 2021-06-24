@@ -212,6 +212,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         updatePhotoView()
     }
 
+    // TODO : chapter16 challenge - 사진을 확대해서 보여주기
     private fun updatePhotoView() {
         if (photoFile.exists()) {
             val bitmap = getScaledBitmap(photoFile.path, requireActivity())
